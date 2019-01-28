@@ -1,0 +1,43 @@
+#!/usr/bin/env perl -w
+#
+# get_noddle_score - Gets your credit score from Noddle
+#
+# v1.0, 28 Jan, 2019.  (C)2019 Andrew Rawlins
+
+use strict;
+use warnings;
+use WWW::Mechanize;
+use HTTP::Cookies;
+
+# =============================
+# Change Me
+# -----------------------------
+my $username = 'yourusername';
+my $password = 'Y0uRP455word';
+# -----------------------------
+
+my $url = "https://www.noddle.co.uk/account/sign-in";
+
+my $mech = WWW::Mechanize->new();
+
+$mech->cookie_jar(HTTP::Cookies->new());
+$mech->get($url);
+#$mech->form_id('login_form');
+$mech->field("Username", $username);
+$mech->field("Password", $password);
+$mech->click;
+
+my $content = $mech->content();
+
+if ($content =~ /<span .+updated-date.+>Updated:\s+(.+)<\/span>/) {
+    my $noddle_date = $1;
+    print "Last Updated : " . $noddle_date . "\n";
+}
+
+if ($content =~ /<div .+credit-score.+of\s+(.+)<\/div>/) {
+    my $score_line = $1;
+    my @scores = split /">/, $score_line;
+    print "Your Score   : " . $scores[1] . "\n";
+    print "Max Score    : " . $scores[0] . "\n";
+}
+
