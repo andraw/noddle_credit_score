@@ -31,13 +31,23 @@ my $content = $mech->content();
 
 if ($content =~ /<span .+updated-date.+>Updated:\s+(.+)<\/span>/) {
     my $noddle_date = $1;
-    print "Last Updated : " . $noddle_date . "\n";
+    print "Last Updated    : " . $noddle_date . "\n";
 }
 
 if ($content =~ /<div .+credit-score.+of\s+(.+)<\/div>/) {
     my $score_line = $1;
     my @scores = split /">/, $score_line;
-    print "Your Score   : " . $scores[1] . "\n";
-    print "Max Score    : " . $scores[0] . "\n";
+    print "Your Score      : " . $scores[1] . "\n";
+    print "Max Score       : " . $scores[0] . "\n";
+}
+
+if ($content =~ /<div .+stat-debt--up">&#163\;\s+(.+)<\/div>/) {
+    my $short_debt = $1;
+    print "Short-term Debt : " . $short_debt . "\n";
+}
+
+if ($content =~ /<div .+stat-debt--down">&#163\;\s+(.+)<\/div>/) {
+    my $long_debt = $1;
+    print "Long-term Debt  : " . $long_debt . "\n";
 }
 
